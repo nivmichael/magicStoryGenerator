@@ -1,20 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react';
+import { StatusBar, SafeAreaView } from 'react-native';
+import WebViewScreen from './app/components/WebViewScreen';
+import PermissionService from './app/services/permissions';
 
 export default function App() {
+  useEffect(() => {
+    (async () => {
+      await PermissionService.requestCameraPermission();
+      await PermissionService.requestLocationPermission();
+      await PermissionService.requestMediaPermission();
+    })();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle="dark-content" />
+      <WebViewScreen url="https://app--magic-story-app-v2-main-740d4861.base44.app" />
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
