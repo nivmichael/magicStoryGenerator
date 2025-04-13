@@ -1,27 +1,26 @@
+import { useCallback } from 'react';
+import { WebView, WebViewNavigation } from 'react-native-webview';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking'; // Changed from react-native Linking
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { WebView } from 'react-native-webview';
 
 export default function WebViewScreen({ url }: { url: string }) {
+  const handleShouldStartLoad = useCallback((request: WebViewNavigation) => {
+    // Detect Google auth URLs
+    if (request.url.includes('accounts.google.com')) {
+      WebBrowser.openAuthSessionAsync(
+        request.url, 
+        Linking.createURL('/') // Changed from createURL to makeUrl
+      );
+      return false;
+    }
+    return true;
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <WebView
-        source={{ uri: url }}
-        style={styles.webview}
-        allowsInlineMediaPlayback
-        javaScriptEnabled
-        domStorageEnabled
-        sharedCookiesEnabled
-      />
-    </View>
+    <WebView
+      source={{ uri: url }}
+      onShouldStartLoadWithRequest={handleShouldStartLoad}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  webview: {
-    flex: 1,
-  },
-});
