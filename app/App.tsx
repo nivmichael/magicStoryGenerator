@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { StatusBar, SafeAreaView } from 'react-native';
-import WebViewScreen from './app/components/WebViewScreen';
-import PermissionService from './app/services/permissions';
+import WebViewScreen from './components/WebViewScreen';
+import PermissionService from './services/permissions';
+import React from 'react';
 
 export default function App() {
   useEffect(() => {
